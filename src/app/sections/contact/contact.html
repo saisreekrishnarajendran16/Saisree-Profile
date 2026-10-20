@@ -1,0 +1,71 @@
+@let p = resume.profile();
+<section class="section" id="contact" aria-labelledby="contact-title">
+  <div class="wrap two-col">
+    <header class="section__head">
+      <p class="section__num">05</p>
+      <h2 id="contact-title">Contact</h2>
+    </header>
+    <div class="section__body contact">
+      <div class="contact__intro" appReveal>
+        <p class="contact__lead">
+          Open to conversations about senior and lead full-stack roles — Angular, .NET, and distributed systems.
+        </p>
+        <ul class="contact__links">
+          <li><a [href]="'mailto:' + p.email"><app-icon name="mail" [size]="18" />{{ p.email }}</a></li>
+          <li>
+            <a [href]="p.linkedin" target="_blank" rel="noopener">
+              <app-icon name="linkedin" [size]="18" />{{ linkedinLabel }}
+            </a>
+          </li>
+          @if (p.github) {
+            <li><a [href]="p.github" target="_blank" rel="noopener"><app-icon name="github" [size]="18" />GitHub</a></li>
+          }
+          <li><a [href]="p.resumePdf" download><app-icon name="download" [size]="18" />Download résumé (PDF)</a></li>
+        </ul>
+      </div>
+
+      <form class="form" [formGroup]="form" (ngSubmit)="submit(hp.value)" novalidate appReveal>
+        @for (f of fields; track f.name) {
+          @let err = errorFor(f);
+          <div class="field">
+            <label [for]="'cf-' + f.name">{{ f.label }}</label>
+            @switch (f.type) {
+              @case ('textarea') {
+                <textarea [id]="'cf-' + f.name" [formControlName]="f.name" [rows]="f.rows ?? 4"
+                  [attr.aria-invalid]="err ? 'true' : null" [attr.aria-describedby]="err ? 'cf-' + f.name + '-err' : null"
+                  [attr.aria-required]="f.required || null"></textarea>
+              }
+              @default {
+                <input [id]="'cf-' + f.name" [type]="f.type" [formControlName]="f.name"
+                  [attr.autocomplete]="f.autocomplete ?? null"
+                  [attr.aria-invalid]="err ? 'true' : null" [attr.aria-describedby]="err ? 'cf-' + f.name + '-err' : null"
+                  [attr.aria-required]="f.required || null" />
+              }
+            }
+            @if (err) {
+              <p class="field__error" [id]="'cf-' + f.name + '-err'">{{ err }}</p>
+            }
+          </div>
+        }
+
+        <!-- honeypot: hidden from people and assistive tech, bots tend to fill it -->
+        <input #hp class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <button class="btn btn--primary" type="submit" [disabled]="status() === 'sending'">
+          {{ status() === 'sending' ? 'Sending…' : 'Send message' }}
+        </button>
+
+        <p class="form__status" role="status" aria-live="polite"
+          [class.is-ok]="status() === 'sent' || status() === 'mailto'"
+          [class.is-err]="status() === 'invalid' || status() === 'error'">
+          @switch (status()) {
+            @case ('invalid') { Please fix the highlighted fields. }
+            @case ('mailto') { Opening your email app… }
+            @case ('sent') { Thanks, your message has been sent. }
+            @case ('error') { Something went wrong. Please email {{ p.email }} directly. }
+          }
+        </p>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,46 @@
+@let p = resume.profile();
+<section class="hero" id="top">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>{{ p.title }}</p>
+      <h1>{{ p.name }}</h1>
+      <p class="hero__role">{{ p.headline }}</p>
+      <p class="hero__lede">{{ p.lede }}</p>
+      <div class="actions">
+        <a class="btn btn--primary" [href]="p.resumePdf" target="_blank" rel="noopener">
+          <app-icon name="file" /> View résumé
+        </a>
+        <a class="btn" [href]="p.linkedin" target="_blank" rel="noopener">
+          <app-icon name="linkedin" /> Connect on LinkedIn
+        </a>
+      </div>
+      <p class="hero__meta"><app-icon name="pin" [size]="14" /> {{ p.location }}</p>
+    </div>
+
+    <aside class="hero__card" aria-label="Current platform stack">
+      <div class="term">
+        <div class="term__bar" aria-hidden="true"><span></span><span></span><span></span><em>platform.config.ts</em></div>
+        <pre class="term__body"><code><span class="c">// Live Count — 3D Quantity Take-off</span>
+<span class="k">export const</span> stack = &#123;
+  api:       [<span class="s">"ASP.NET 8"</span>, <span class="s">"Web API"</span>],
+  data:      [<span class="s">"MongoDB"</span>, <span class="s">"OPFS"</span>, <span class="s">"IndexedDB"</span>],
+  messaging: [<span class="s">"MassTransit"</span>, <span class="s">"Azure Service Bus"</span>],
+  realtime:  <span class="s">"SignalR"</span>,
+  client:    [<span class="s">"Angular 20"</span>, <span class="s">"NgRx"</span>, <span class="s">"RxJS"</span>],
+  workers:   <span class="n">true</span>,
+&#125;;</code></pre>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="metrics" aria-label="Impact at a glance">
+  <div class="wrap metrics__grid">
+    @for (m of resume.allMetrics(); track m.label) {
+      <div class="metric" appReveal>
+        <span class="metric__num">{{ m.value }}</span>
+        <span class="metric__label">{{ m.label }}</span>
+      </div>
+    }
+  </div>
+</section>

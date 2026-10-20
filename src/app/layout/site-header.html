@@ -1,0 +1,28 @@
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" appScrollTo="top" [attr.aria-label]="resume.profile().name + ' — back to top'">
+      <span class="brand__mark" aria-hidden="true">{{ resume.profile().initials }}</span>
+      <span class="brand__name">{{ resume.profile().name }}</span>
+    </a>
+
+    <nav class="nav" id="site-nav" aria-label="Sections" [class.is-open]="ui.menuOpen()">
+      @for (section of resume.nav(); track section.id) {
+        <a [appScrollTo]="section.id" [class.is-active]="ui.activeSection() === section.id"
+          [attr.aria-current]="ui.activeSection() === section.id ? 'location' : null">{{ section.label }}</a>
+      }
+    </nav>
+
+    <div class="topbar__actions">
+      <button class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"
+        (click)="ui.toggleTheme()">
+        <app-icon class="i-sun" name="sun" [size]="18" />
+        <app-icon class="i-moon" name="moon" [size]="18" />
+      </button>
+      <button class="icon-btn menu-btn" type="button" aria-controls="site-nav"
+        [attr.aria-expanded]="ui.menuOpen()" [attr.aria-label]="ui.menuOpen() ? 'Close menu' : 'Open menu'"
+        (click)="ui.toggleMenu()">
+        <app-icon [name]="ui.menuOpen() ? 'close' : 'menu'" [size]="20" />
+      </button>
+    </div>
+  </div>
+</header>

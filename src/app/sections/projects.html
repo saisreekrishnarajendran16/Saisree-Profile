@@ -1,0 +1,59 @@
+<section class="section section--alt" id="projects" aria-labelledby="projects-title">
+  <div class="wrap two-col">
+    <header class="section__head">
+      <p class="section__num">04</p>
+      <h2 id="projects-title">Projects &amp; case studies</h2>
+    </header>
+    <div class="section__body">
+      <div class="cases">
+        @for (c of resume.caseStudies(); track c.title) {
+          <article class="case" appReveal>
+            <p class="case__ctx">{{ c.context }}</p>
+            <h3>{{ c.title }}</h3>
+            <dl class="case__flow">
+              <div><dt>Problem</dt><dd>{{ c.problem }}</dd></div>
+              <div><dt>Solution</dt><dd>{{ c.solution }}</dd></div>
+              <div><dt>Impact</dt><dd [innerHTML]="c.impact"></dd></div>
+            </dl>
+          </article>
+        }
+      </div>
+
+      <div class="products-head">
+        <h3 class="sub-title" id="products-title">Products I've built</h3>
+        <div class="filters" role="group" aria-label="Filter products by technology">
+          @for (opt of resume.techOptions(); track opt.label) {
+            <button type="button" class="filter" [class.is-active]="resume.activeTech() === opt.label"
+              [attr.aria-pressed]="resume.activeTech() === opt.label" [disabled]="opt.count === 0"
+              (click)="resume.setActiveTech(opt.label)">
+              {{ opt.label }} <span class="filter__count">{{ opt.count }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="cards" aria-labelledby="products-title" aria-live="polite">
+        @for (p of resume.visibleProducts(); track p.name) {
+          <article class="card">
+            <div class="card__top">
+              @if (p.status === 'In progress') {
+                <span class="chip chip--live"><span class="status-dot" aria-hidden="true"></span>{{ p.status }}</span>
+              } @else {
+                <span class="chip">{{ p.status }}</span>
+              }
+              <span class="card__date">{{ p.period }}</span>
+            </div>
+            <h4>{{ p.name }}</h4>
+            <p class="card__org">{{ p.org }}</p>
+            <p>{{ p.summary }}</p>
+            <ul class="tags" aria-label="Tech stack">
+              @for (t of p.stack; track t) {
+                <li>{{ t }}</li>
+              }
+            </ul>
+          </article>
+        }
+      </div>
+    </div>
+  </div>
+</section>
